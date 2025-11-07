@@ -11,7 +11,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.926.0",
+    "@aws-sdk/credential-providers": "^3.926.0",
+    "dotenv": "^17.2.3",
     "nodemon": "^3.1.10",
+    "uuid": "^13.0.0",
     "yargs": "^18.0.0"
   }
 }
