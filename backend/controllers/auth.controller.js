@@ -47,13 +47,37 @@ async function signup(req, res) {
     res.json({ token });
   } catch (error) {
     console.error("Error during sign up : ", error.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server error!!");
   }
 }
 
-const login = (req, res) => {
-  res.send("loging in");
-};
+async function login(req, res) {
+  const { email, password } = req.body;
+  try {
+    await connectClient();
+
+    const db = client.db("GitData");
+    const usersCollection = db.collection("users");
+
+    const user = await usersCollection.findOne({ email });
+    if (!user) {
+      return res.status(500).json({ message: "Invalid credentials!!" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(500).json({ message: "Invalid credentials!!" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "2h",
+    });
+    res.json({ token, userId: user._id });
+  } catch (error) {
+    console.error("Error while login in : ", error.message);
+    res.status(500).send("Server error!!");
+  }
+}
 
 module.exports = {
   signup,
