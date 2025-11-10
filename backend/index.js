@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const http = require("http");
 const { Server } = require("socket.io");
 
+const mainRouter = require("./routes/main.router.js");
+
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 
@@ -77,9 +79,8 @@ function startServer() {
     .catch((error) => console.log("Unable to connect : ", error));
 
   app.use(cors({ origin: "*" }));
-  app.get("/", (req, res) => {
-    res.send("Hello!! Everything is working perfectly..");
-  });
+
+  app.use("/", mainRouter);
 
   let user = "test";
   const httpServer = http.createServer(app);
