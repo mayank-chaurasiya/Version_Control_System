@@ -1,27 +1,13 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { MongoClient } = require("mongodb");
-
-const dotenv = require("dotenv");
-dotenv.config();
-
-const URI = process.env.MONGODB_URI;
-
-let client;
-
-async function connectClient() {
-  if (!client) {
-    client = new MongoClient(URI);
-    await client.connect();
-  }
-}
+const { connectClient, getDb } = require("../config/db");
 
 async function signup(req, res) {
   const { username, password, email } = req.body;
   try {
-    await connectClient();
-    const db = client.db("GitData");
-    const usersCollection = db.collection("users");
+  await connectClient();
+  const db = getDb();
+  const usersCollection = db.collection("users");
 
     const user = await usersCollection.findOne({ username });
     if (user) {
@@ -41,7 +27,8 @@ async function signup(req, res) {
     };
     const result = await usersCollection.insertOne(newUser);
 
-    const token = jwt.sign({ id: result.insetID }, process.env.JWT_SECRET_KEY, {
+    // result.insertedId contains the new document id
+    const token = jwt.sign({ id: result.insertedId }, process.env.JWT_SECRET_KEY, {
       expiresIn: "2h",
     });
     res.json({ token });
@@ -54,10 +41,9 @@ async function signup(req, res) {
 async function login(req, res) {
   const { email, password } = req.body;
   try {
-    await connectClient();
-
-    const db = client.db("GitData");
-    const usersCollection = db.collection("users");
+  await connectClient();
+  const db = getDb();
+  const usersCollection = db.collection("users");
 
     const user = await usersCollection.findOne({ email });
     if (!user) {
