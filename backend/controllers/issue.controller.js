@@ -44,8 +44,13 @@ async function updateIssueById(req, res) {
 }
 
 async function getAllIssues(req, res) {
+  const { id } = req.params;
   try {
-    const issues = await Issue.find({});
+    const issues = await Issue.find({ repository: id });
+
+    if (!issues) {
+      res.status(400).json({ message: "No Issues found !!" });
+    }
 
     res.json(issues);
   } catch (error) {
@@ -57,9 +62,9 @@ async function getAllIssues(req, res) {
 async function getIssueById(req, res) {
   const { id } = req.params;
   try {
-    const issue = await Issue.find({ _id: id });
+    const issue = await Issue.findById(id);
     if (!issue) {
-      res.status(400).json({ message: "No repository found !!" });
+      res.status(400).json({ message: "No Issue found !!" });
     }
 
     res.json(issue);
