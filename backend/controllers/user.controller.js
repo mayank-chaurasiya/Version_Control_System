@@ -1,4 +1,3 @@
-const { ReturnDocument } = require("mongodb");
 const { connectClient, getDb } = require("../config/db");
 var ObjectId = require("mongodb").ObjectId;
 const bcrypt = require("bcryptjs");
@@ -46,7 +45,6 @@ async function updateUserProfile(req, res) {
     if (!ObjectId.isValid(currentID)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
-    // const userObjectId = new ObjectId(currentID);
 
     // Update Fields
     let updateFields = {};

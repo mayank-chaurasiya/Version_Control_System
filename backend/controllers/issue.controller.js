@@ -1,22 +1,94 @@
-const createIssue = (req, res) => {
-  res.send("Issue Create!!");
-};
+const Issue = require("../models/issue.model.js");
 
-const updateIssueById = (req, res) => {
-  res.send("Issue update!!");
-};
+async function createIssue(req, res) {
+  const { title, description } = req.body;
+  const { id } = req.params;
+  try {
+    const issue = new Issue({
+      title,
+      description,
+      repository: id,
+    });
 
-const getAllIssues = (req, res) => {
-  res.send("Issue fetched!!");
-};
+    await issue.save();
 
-const getIssueById = (req, res) => {
-  res.send("Issue fetched by id!!");
-};
+    res.status(201).json(issue);
+  } catch (error) {
+    console.error("Error creating Issue : ", error.message);
+    res.status(500).send("Server error");
+  }
+}
 
-const deleteIssueById = (req, res) => {
-  res.send("Issue deleted!!");
-};
+async function updateIssueById(req, res) {
+  const { id } = req.params;
+  const { title, description, status } = req.body;
+  try {
+    const issue = await Issue.findById(id);
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found!!" });
+    }
+    issue.title = title;
+    issue.description = description;
+    issue.status = status;
+
+    const updatedIssue = await issue.save();
+
+    res.json({
+      message: "Issue Updated successfully",
+      issue: updatedIssue,
+    });
+  } catch (error) {
+    console.error("Error updating issue : ", error.message);
+    res.status(500).send("Server error");
+  }
+}
+
+async function getAllIssues(req, res) {
+  try {
+    const issues = await Issue.find({});
+
+    res.json(issues);
+  } catch (error) {
+    console.error("Error fetching Issue List: ", error.message);
+    res.status(500).send("Server error");
+  }
+}
+
+async function getIssueById(req, res) {
+  const { id } = req.params;
+  try {
+    const issue = await Issue.find({ _id: id });
+    if (!issue) {
+      res.status(400).json({ message: "No repository found !!" });
+    }
+
+    res.json(issue);
+  } catch (error) {
+    console.error("Error fetching Issue by ID : ", error.message);
+    res.status(500).send("Server error");
+  }
+}
+
+async function deleteIssueById(req, res) {
+  const { id } = req.params;
+  try {
+    const deleteIssue = await Issue.findByIdAndDelete(id);
+
+    if (!deleteIssue) {
+      return res
+        .status(404)
+        .json({ message: "Issue not found or error deleting" });
+    }
+
+    res.json({
+      message: "Issue Deleted",
+      deletedIssueTitle: deleteIssue.title,
+    });
+  } catch (error) {
+    console.error("Error Deleting Issue : ", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+}
 
 module.exports = {
   createIssue,
