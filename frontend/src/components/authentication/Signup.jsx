@@ -1,8 +1,8 @@
 import "./auth.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { useAuth } from "../../authContext.jsx";
+import axios from "axios";
 
 import logo from "../../assets/github-mark-white.svg";
 
@@ -12,12 +12,14 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { setCurrentUser } = useAuth();
+
   const handleSignup = async (event) => {
     event.preventDefault();
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3030/signup/", {
+      const res = await axios.post("http://localhost:3030/signup", {
         email: email,
         password: password,
         username: username,
@@ -49,7 +51,7 @@ const Signup = () => {
         </div>
         <div className="login-box">
           <div>
-            <label for="username" className="label">
+            <label htmlFor="username" className="label">
               Username
             </label>
             <input
@@ -63,7 +65,7 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label for="email" className="label">
+            <label htmlFor="email" className="label">
               Email address
             </label>
             <input
@@ -77,7 +79,7 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label for="password" className="label">
+            <label htmlFor="password" className="label">
               Password
             </label>
             <input
@@ -90,9 +92,9 @@ const Signup = () => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div class="d-grid gap-2 col-6 mx-auto">
+          <div className="d-grid gap-2 col-6 mx-auto">
             <button
-              class="btn btn-success submit-btn"
+              className="btn btn-success submit-btn"
               type="button"
               disabled={loading}
               onClick={handleSignup}

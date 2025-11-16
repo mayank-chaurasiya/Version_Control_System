@@ -1,22 +1,24 @@
 import "./auth.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../authContext.jsx";
 import axios from "axios";
-import { useAuth } from "../../authContext";
 
 import logo from "../../assets/github-mark-white.svg";
 
 const Login = () => {
+  // run once on mount to ensure any previous session is cleared
   useEffect(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     setCurrentUser(null);
-  });
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { currentUser, setCurrentUser } = useAuth();
+  const { setCurrentUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -28,13 +30,15 @@ const Login = () => {
         password: password,
       });
 
-      localStorage.getItem("token", res.data.token);
+      // store token and user id locally
+      localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
 
       setCurrentUser(res.data.userId);
       setLoading(false);
 
-      window.location.href = "/";
+      // navigate to dashboard
+      navigate("/");
     } catch (error) {
       console.error("Error : ", error.message);
       alert("Log In failed");
@@ -54,7 +58,7 @@ const Login = () => {
         </div>
         <div className="login-box">
           <div>
-            <label for="email" className="label">
+            <label htmlFor="email" className="label">
               Email address
             </label>
             <input
@@ -68,7 +72,7 @@ const Login = () => {
             />
           </div>
           <div>
-            <label for="password" className="label">
+            <label htmlFor="password" className="label">
               Password
             </label>
             <input
@@ -81,9 +85,9 @@ const Login = () => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div class="d-grid gap-2 col-6 mx-auto">
+          <div className="d-grid gap-2 col-6 mx-auto">
             <button
-              class="btn btn-success submit-btn"
+              className="btn btn-success submit-btn"
               type="button"
               disabled={loading}
               onClick={handleLogin}
