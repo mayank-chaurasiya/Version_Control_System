@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+}
+
+.main-container {
+    color: #f1f6fd;
+    height: 100vh;
+    width: 100vw;
+    font-family: "Asap", sans-serif;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.logo-login {
+    width: 48px;
+}
+
+.content-box {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input {
+    width: 250px;
+    height: 35px;
+    background-color: #0c1116;
+    border-radius: 5px;
+    padding: 0 1rem;
+    border: 0.5px solid #f1f6fd;
+    font-size: 1rem;
+    color: whitesmoke;
+    transition: border-color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        background 0.2s cubic-bezier(0.25, 0.01, 0.25, 1) 0s;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #f1f6fd;
+    transition: color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s;
+}
+
+.input:hover,
+.input:focus {
+    border-color: lightblue;
+}
+
+.login-box {
+    padding: 20px 0px;
+    width: 364px;
+    min-height: 300px;
+    border-radius: 10px;
+    background-color: #161a23;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+  .submit-btn:hover {
+    background-color: #499458;
+    cursor: pointer;
+  }
