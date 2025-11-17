@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Repository = require("../models/repo.model.js");
+const User = require("../models/user.model.js");
 
 async function createRepository(req, res) {
   const { owner, name, issues, content, description, visibility } = req.body;
@@ -15,7 +16,8 @@ async function createRepository(req, res) {
     const newRepository = new Repository({
       name,
       description,
-      visibility,
+      // ensure visibility is boolean
+      visibility: visibility === true || visibility === "true",
       owner,
       content,
       issues,
@@ -23,9 +25,22 @@ async function createRepository(req, res) {
 
     const result = await newRepository.save();
 
+    // push repository id into user's repositories array and return updated user
+    const updatedUser = await User.findByIdAndUpdate(
+      owner,
+      { $push: { repositories: result._id } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      console.warn(`Repository created but owner ${owner} not found to update repositories array`);
+    }
+
     res.status(201).json({
       message: "Repository created",
       repositoryID: result._id,
+      repositoryName: result.name,
+      ownerUpdated: !!updatedUser,
     });
   } catch (error) {
     console.error("Error creating Repository : ", error.message);
@@ -83,13 +98,26 @@ async function fetchRepositoryByName(req, res) {
 }
 
 async function fetchRepositoriesForCurrentUser(req, res) {
-  const userID = req.user;
+  // Support two ways of specifying the user:
+  // - authenticated requests with `req.user` set by auth middleware
+  // - direct requests with `:userID` route param (frontend usage)
+  const userID = req.user || req.params.userID;
 
   try {
-    const repositories = await Repository.find({ owner: userID });
+    if (!userID) {
+      return res.status(400).json({ error: "user id is required" });
+    }
 
-    if (!repositories || repositories.length == 0) {
-      return res.status(404).json({ error: "user repositories not found" });
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userID)) {
+      return res.status(400).json({ error: "invalid user id" });
+    }
+
+    const repositories = await Repository.find({ owner: userID }).populate("owner");
+
+    // return empty array (200) if user has no repositories
+    if (!repositories || repositories.length === 0) {
+      return res.json({ message: "No repositories found for user", repositories: [] });
     }
 
     res.json({ message: "Repositories Found!!", repositories });

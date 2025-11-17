@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+#dashboard {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.input {
+    width: 250px;
+    height: 35px;
+    background-color: #0c1116;
+    border-radius: 5px;
+    padding: 0 1rem;
+    border: 0.5px solid #f1f6fd;
+    font-size: 1rem;
+    color: whitesmoke;
+    transition: border-color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        color 0.3s cubic-bezier(0.25, 0.01, 0.25, 1) 0s,
+        background 0.2s cubic-bezier(0.25, 0.01, 0.25, 1) 0s;
+}
+
+
+.input:hover,
+.input:focus {
+    border-color: lightblue;
+}

@@ -35,7 +35,7 @@ async function signup(req, res) {
         expiresIn: "2h",
       }
     );
-    res.json({ token, userId: result.insetId });
+    res.json({ token, userId: result.insertedId });
   } catch (error) {
     console.error("Error during sign up : ", error.message);
     res.status(500).send("Server error!!");
