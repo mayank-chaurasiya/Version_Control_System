@@ -6,7 +6,6 @@ import axios from "axios";
 import HeatMapProfile from "./HeatMap";
 import { useAuth } from "../../authContext.jsx";
 
-
 import logo from "../../assets/github-mark-white.svg";
 
 const Profile = () => {
@@ -21,7 +20,7 @@ const Profile = () => {
       if (userId) {
         try {
           const response = await axios.get(
-            `http://localhost:3030/userProfile/${userId}`
+            `16.170.225.81:3030/userProfile/${userId}`
           );
           setUserDetails(response.data.user);
         } catch (error) {
