@@ -1,0 +1,21 @@
+.nav-img {
+    width: 55px;
+    border: solid;
+    border-radius: 50%;
+    
+}
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.link-color {
+    color: white;
+}
+
+.link-color:hover {
+    text-decoration: underline;
+}
