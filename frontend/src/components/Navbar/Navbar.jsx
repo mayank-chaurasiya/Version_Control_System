@@ -18,20 +18,20 @@ const Navbar = () => {
             <h2 className="p-1 mt-1">GitHub</h2>
           </div>
         </Link>
-        <ul class="nav justify-content-end mx-5">
-          <li class="nav-item">
+        <ul className="nav justify-content-end mx-5">
+          <li className="nav-item">
             <Link to="/create" className="nav-link link-color">
               <button className="btn btn-outline-light">
                 Create New Repository
               </button>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
             <Link to="/profile" className="nav-link link-color">
               <p>Profile</p>
             </Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
             <Link to="/auth" className="nav-link link-color">
               Sign out
             </Link>

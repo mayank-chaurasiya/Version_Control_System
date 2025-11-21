@@ -3,12 +3,16 @@ import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import HeatMapProfile from "./HeatMap";
+import { useAuth } from "../../authContext.jsx";
+
 
 import logo from "../../assets/github-mark-white.svg";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({ username: "username" });
+  const { setCurrentUser } = useAuth();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -41,7 +45,7 @@ const Profile = () => {
       </div>
       <div className="container">
         <div className="row mt-5">
-          <div className="card col-2 bg-dark">
+          <div className="card col-4 p-4 bg-dark">
             <div className="card-body">
               <div className="image">
                 <img src={logo} alt="" />
@@ -50,13 +54,28 @@ const Profile = () => {
                 {userDetails.username}
               </h5>
 
-              <a href="#" class="card-link">
+              <a href="#" className="card-link">
                 followers
               </a>
-              <a href="#" class="card-link">
+              <a href="#" className="card-link">
                 following
               </a>
+              <br />
+              <button
+                className="btn btn-outline-danger mt-4 text-white"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("userId");
+                  setCurrentUser(null);
+                  window.location.href = "/auth";
+                }}
+              >
+                Log Out
+              </button>
             </div>
+          </div>
+          <div className="heat-map-section col p-5">
+            <HeatMapProfile />
           </div>
         </div>
       </div>

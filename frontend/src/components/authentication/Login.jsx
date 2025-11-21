@@ -9,9 +9,9 @@ import logo from "../../assets/github-mark-white.svg";
 const Login = () => {
   // run once on mount to ensure any previous session is cleared
   // useEffect(() => {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("userId");
-  //   setCurrentUser(null);
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("userId");
+    // setCurrentUser(null);
   // }, []);
 
   const [email, setEmail] = useState("");
